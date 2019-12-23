@@ -5,7 +5,6 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { List, Avatar } from 'antd';
 
 function Contacts(props) {
-  console.log(props)
   return (
     <List
       itemLayout="horizontal"

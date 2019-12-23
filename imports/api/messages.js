@@ -31,6 +31,3 @@ Meteor.methods({
     })
   }
 })
-
-
-// export getConvoId

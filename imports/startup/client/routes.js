@@ -47,12 +47,3 @@ FlowRouter.route('/chat/:userId', {
     })
   }
 })
-
-// FlowRouter.route('/lists/:_id', {
-//   name: 'Lists.show',
-//   action() {
-//     mount(AppContainer, {
-//       main: <ListPageContainer/>,
-//     });
-//   },
-// });

@@ -11,7 +11,6 @@ function LoginForm(props) {
           if (!err)
             FlowRouter.go('/contacts')
         })
-        console.log('Received values of form: ', values);
       }
     });
   };
