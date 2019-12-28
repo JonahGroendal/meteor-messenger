@@ -10,6 +10,7 @@
   "dependencies": {
     "@babel/runtime": "^7.7.6",
     "antd": "^3.26.3",
+    "antd-mobile": "^2.3.1",
     "indexof": "0.0.1",
     "meteor-node-stubs": "^1.0.0",
     "react": "^16.9.0",

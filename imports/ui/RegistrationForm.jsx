@@ -26,6 +26,15 @@ const tailFormItemLayout = {
   },
 };
 
+const styles = {
+  root: {
+    padding: '10px'
+  },
+  form: {
+    maxWidth: '600px'
+  }
+}
+
 function RegistrationForm(props) {
   const { getFieldDecorator } = props.form;
   const [confirmDirty, setConfirmDirty] = React.useState(false);
@@ -70,49 +79,51 @@ function RegistrationForm(props) {
   };
 
   return (
-    <Form {...formItemLayout} onSubmit={handleSubmit} style={{ maxWidth: '600px' }} >
-      <Form.Item label="Username">
-        {getFieldDecorator('username', {
-          rules: [
-            {
-              required: true,
-              message: 'Please input your username!',
-            },
-          ],
-        })(<Input />)}
-      </Form.Item>
-      <Form.Item label="Password" hasFeedback>
-        {getFieldDecorator('password', {
-          rules: [
-            {
-              required: true,
-              message: 'Please input your password!',
-            },
-            {
-              validator: validateToNextPassword,
-            },
-          ],
-        })(<Input.Password />)}
-      </Form.Item>
-      <Form.Item label="Confirm Password" hasFeedback>
-        {getFieldDecorator('confirm', {
-          rules: [
-            {
-              required: true,
-              message: 'Please confirm your password!',
-            },
-            {
-              validator: compareToFirstPassword,
-            },
-          ],
-        })(<Input.Password onBlur={handleConfirmBlur} />)}
-      </Form.Item>
-      <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit">
-          Register
-        </Button>
-      </Form.Item>
-    </Form>
+    <div style={styles.root}>
+      <Form {...formItemLayout} onSubmit={handleSubmit} style={styles.form} >
+        <Form.Item label="Username">
+          {getFieldDecorator('username', {
+            rules: [
+              {
+                required: true,
+                message: 'Please input your username!',
+              },
+            ],
+          })(<Input />)}
+        </Form.Item>
+        <Form.Item label="Password" hasFeedback>
+          {getFieldDecorator('password', {
+            rules: [
+              {
+                required: true,
+                message: 'Please input your password!',
+              },
+              {
+                validator: validateToNextPassword,
+              },
+            ],
+          })(<Input.Password />)}
+        </Form.Item>
+        <Form.Item label="Confirm Password" hasFeedback>
+          {getFieldDecorator('confirm', {
+            rules: [
+              {
+                required: true,
+                message: 'Please confirm your password!',
+              },
+              {
+                validator: compareToFirstPassword,
+              },
+            ],
+          })(<Input.Password onBlur={handleConfirmBlur} />)}
+        </Form.Item>
+        <Form.Item {...tailFormItemLayout}>
+          <Button type="primary" htmlType="submit">
+            Register
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   )
 }
 

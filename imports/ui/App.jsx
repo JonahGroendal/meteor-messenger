@@ -1,12 +1,16 @@
-import 'antd/dist/antd.css';
-
 import React from 'react';
 import RegistrationForm from './RegistrationForm.jsx'
 import { withTracker } from 'meteor/react-meteor-data';
 
+const styles = {
+  root: {
+    height: '100%'
+  }
+}
+
 function App(props) {
   return (
-    <div>
+    <div style={styles.root}>
       {props.main}
     </div>
   )

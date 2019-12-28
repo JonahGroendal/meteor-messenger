@@ -6,16 +6,44 @@ import moment from 'moment';
 
 const { TextArea } = Input;
 
+const styles = {
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    minHeight: 0
+  },
+  messages: {
+    paddingLeft: '10px',
+    paddingRight: '10px',
+    display: 'flex',
+    flexDirection: 'column-reverse',
+    flexGrow: 1,
+    overflowY: 'scroll'
+  },
+  input: {
+    display: 'flex',
+    padding: '10px'
+  },
+  button: {
+    marginLeft: '10px'
+  }
+}
+
 function Chat({ userId, users, messages, loading }) {
   const [textInput, setTextInput] = useState('');
+  const newestMessage = React.createRef();
+
   const handleSend = () => {
     Meteor.call('messages.send', [userId, textInput]);
     setTextInput('');
+    newestMessage.current.scrollIntoView(false);
   }
 
   return (
-    <div>
-      <div>
+    <div style={styles.root}>
+      <div style={styles.messages}>
+        <div ref={newestMessage} />
         {messages.map((message, i) => (
           <Comment
             key={i}
@@ -32,15 +60,14 @@ function Chat({ userId, users, messages, loading }) {
           />
         ))}
       </div>
-      <div>
+      <div style={styles.input}>
         <TextArea
           value={textInput}
           onChange={e => setTextInput(e.target.value)}
           placeholder="Type a message"
           autoSize={{ minRows: 1, maxRows: 5 }}
-          style={{ maxWidth: '80%' }}
         />
-        <Button type="primary" onClick={handleSend}>
+        <Button type="primary" onClick={handleSend} style={styles.button}>
           Send
         </Button>
       </div>
@@ -60,7 +87,7 @@ export default withTracker(({ userId }) => {
     users[thisUser._id] = thisUser.username;
     users[userId] = Meteor.users.findOne({ _id: userId }).username;
     convoId = getConvoId(thisUser._id, userId);
-    messages = Messages.find({ convoId }).fetch();
+    messages = Messages.find({ convoId }, {sort: {timestamp: -1}}).fetch();
   }
   return {
     loading,
