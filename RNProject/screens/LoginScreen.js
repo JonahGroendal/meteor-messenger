@@ -7,17 +7,24 @@ import React from 'react';
 import {StyleSheet, Text, View, TextInput, Button, TouchableOpacity} from 'react-native';
 import Meteor from 'react-native-meteor';
 
-export default function LoginScreen({ onPressRegister }) {
+function LoginScreen({ navigation }) {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
 
   const handleSubmit = () => {
     Meteor.loginWithPassword(username, password, err => {
-      if (!err)
+      if (!err) {
         console.log('login successful')
-      else
+        navigation.navigate('Contacts')
+      }
+      else {
         console.log(err.reason)
+      }
     })
+  }
+
+  const handlePressRegister = () => {
+    navigation.navigate('Register');
   }
 
   return (
@@ -51,13 +58,19 @@ export default function LoginScreen({ onPressRegister }) {
       </View>
       <View style={styles.createAccountContainer}>
         <Text style={styles.text}>Or </Text>
-        <TouchableOpacity style={styles.touchable} onPress={onPressRegister}>
+        <TouchableOpacity style={styles.touchable} onPress={handlePressRegister}>
           <Text style={styles.touchableText}>create an account</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
+
+LoginScreen.navigationOptions = {
+  header: null,
+}
+
+export default LoginScreen
 
 const styles = StyleSheet.create({
   container: {

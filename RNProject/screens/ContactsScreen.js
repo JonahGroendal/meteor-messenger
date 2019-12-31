@@ -6,6 +6,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, ScrollView, TextInput, Button, FlatList, TouchableOpacity} from 'react-native';
 import Meteor, {withTracker} from 'react-native-meteor';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 function Separator() {
   return (
@@ -18,47 +19,45 @@ function Separator() {
   );
 }
 
-function Item({ id, title, selected, onSelect }) {
+function Contact({ user, selected, onSelect }) {
   return (
     <TouchableOpacity
-      onPress={() => onSelect(id)}
+      onPress={() => onSelect(user)}
       style={[
         styles.item,
         selected ? { backgroundColor: '#E0E0E0' } : {},
       ]}
     >
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>{user.username}</Text>
       <Text style={styles.title}>{">"}</Text>
     </TouchableOpacity>
   );
 }
 
-function ContactsScreen({ users, onSelectUserId }) {
+function ContactsScreen({ users, navigation }) {
   const [selectedId, setSelectedId] = React.useState('');
 
-  const onSelect = id => {
-    setSelectedId(id);
-    setTimeout(() => onSelectUserId(id), 100)
+  const onSelect = (user) => {
+    setSelectedId(user._id);
+    setTimeout(() => {
+      navigation.navigate('Chat', { user })
+    }, 100)
   }
 
-  const handleLogout = () => Meteor.logout()
+  const handleLogout = () => {
+    Meteor.logout(err => {
+      if (!err)
+        navigation.dispatch(resetToLogin)
+    })
+  }
 
   return (
     <View>
-      <View style={styles.topBar}>
-        <Button
-          onPress={handleLogout}
-          title="Log Out"
-          color="#ff751a"
-        />
-      </View>
-      <Separator />
       <FlatList
         data={users}
         renderItem={({ item }) => (
-          <Item
-            id={item._id}
-            title={item.username}
+          <Contact
+            user={item}
             selected={selectedId === item._id}
             onSelect={onSelect}
           />
@@ -73,11 +72,6 @@ function ContactsScreen({ users, onSelectUserId }) {
 }
 
 const styles = StyleSheet.create({
-  topBar: {
-    padding: 10,
-    flexDirection: 'row',
-    justifyContent: 'flex-end'
-  },
   item: {
     padding: 20,
     flexDirection: 'row',
@@ -88,10 +82,31 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withTracker(() => {
+ContactsScreen = withTracker(() => {
   const handle = Meteor.subscribe('directory');
   return {
     users: Meteor.collection('users').find({}),
     loading: !handle.ready()
   };
 })(ContactsScreen);
+
+ContactsScreen.navigationOptions = ({ navigation }) => ({
+  title: 'Contacts',
+  headerLeft: null,
+  headerRight: (
+    <View style={{ marginRight: 10 }}>
+      <Button
+        onPress={() => {
+          Meteor.logout(err => {
+            if (!err)
+              navigation.navigate('Login')
+          })
+        }}
+        title="Log Out"
+        color="#ff751a"
+      />
+    </View>
+  ),
+});
+
+export default ContactsScreen;

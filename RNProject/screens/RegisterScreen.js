@@ -6,8 +6,9 @@
 import React from 'react';
 import {StyleSheet, Text, View, TextInput, Button, TouchableOpacity} from 'react-native';
 import Meteor, { Accounts } from 'react-native-meteor';
+import { StackActions, NavigationActions } from 'react-navigation';
 
-export default function RegisterScreen({ onPressLogIn }) {
+function RegisterScreen({ navigation }) {
   const [username, setUsername] = React.useState('');
   const [password1, setPassword1] = React.useState('');
   const [password2, setPassword2] = React.useState('');
@@ -18,16 +19,21 @@ export default function RegisterScreen({ onPressLogIn }) {
         username: username,
         password: password1
       }, err => {
-        if (err)
+        if (!err) {
+          console.log('User created');
+          navigation.navigate('Contacts');
+        }
+        else {
           console.log(err.reason)
-        else
-          console.log('User created')
+        }
       })
     }
     else {
       console.log("passwords don't match")
     }
   }
+
+  const handlePressLogIn = () => navigation.navigate('Login')
 
   return (
     <View style={styles.container}>
@@ -70,13 +76,19 @@ export default function RegisterScreen({ onPressLogIn }) {
       </View>
       <View style={styles.createAccountContainer}>
         <Text style={styles.text}>Or </Text>
-        <TouchableOpacity style={styles.touchable} onPress={onPressLogIn}>
+        <TouchableOpacity style={styles.touchable} onPress={handlePressLogIn}>
           <Text style={styles.touchableText}>log in to an existing account</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
+
+RegisterScreen.navigationOptions = {
+  header: null,
+}
+
+export default RegisterScreen
 
 const styles = StyleSheet.create({
   container: {

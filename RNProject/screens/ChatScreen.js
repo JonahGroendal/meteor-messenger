@@ -31,7 +31,7 @@ function Message({ text, isIncoming }) {
   )
 }
 
-function ChatScreen({loading, messages, users, userId}) {
+function ChatScreen({loading, messages, userId}) {
   const [inputText, setInputText] = React.useState('');
 
   const messagesRef = React.useRef();
@@ -44,9 +44,6 @@ function ChatScreen({loading, messages, users, userId}) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topBar}>
-        <Text style={styles.titleText}>{users[userId]}</Text>
-      </View>
       <View style={styles.messagesContainer}>
         <FlatList
           ref={messagesRef}
@@ -115,37 +112,34 @@ const styles = StyleSheet.create({
     marginTop: 5,
     maxWidth: '70%',
   },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    padding: 10,
-  },
   titleText: {
     fontSize: 22,
   }
 });
 
-export default withTracker(({ userId }) => {
-  const messagesHandle = Meteor.subscribe('messages', userId);
-  const directoryHandle = Meteor.subscribe('directory')
+ChatScreen = withTracker(props => {
+  const user = props.navigation.getParam('user', undefined);
   const thisUser = Meteor.user();
+  const messagesHandle = Meteor.subscribe('messages', user._id);
+  const directoryHandle = Meteor.subscribe('directory')
   const loading = !messagesHandle.ready() || !directoryHandle.ready()
-  let convoId;
   let messages = [];
-  const users = {};
-  if (!loading) {
-    users[thisUser._id] = thisUser.username;
-    users[userId] = Meteor.collection('users').findOne({ _id: userId }).username;
-    convoId = getConvoId(thisUser._id, userId);
+  const convoId = getConvoId(thisUser._id, user._id);
+  if (!loading)
     messages = Meteor.collection('messages').find({ convoId }, {sort: {timestamp: -1}});
-  }
+
   return {
     loading,
     messages,
-    users,
-    userId
+    userId: user._id,
   };
 })(ChatScreen);
+
+ChatScreen.navigationOptions = ({ navigation }) => ({
+  title: navigation.getParam("user").username
+});
+
+export default ChatScreen;
 
 function getConvoId(userId1, userId2) {
   const ids = [userId1, userId2]
