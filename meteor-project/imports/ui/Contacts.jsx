@@ -2,11 +2,19 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { List, Avatar } from 'antd';
+import { List, Avatar, Button } from 'antd';
 
 const styles={
   root: {
     padding: '10px'
+  },
+  topBar: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingLeft: '10px',
+  },
+  title: {
+    fontSize: 20,
   },
   contact: {
     cursor: 'pointer'
@@ -14,8 +22,25 @@ const styles={
 }
 
 function Contacts(props) {
+  const handleClickLogOut = () => {
+    Meteor.logout(err => {
+      if (!err)
+        FlowRouter.go('/login')
+    })
+  }
+
   return (
     <div style={styles.root}>
+      <div style={styles.topBar}>
+        <p style={styles.title}>Contacts</p>
+        <Button
+          type="primary"
+          style={styles.button}
+          onClick={handleClickLogOut}
+        >
+          Log Out
+        </Button>
+      </div>
       <List
         itemLayout="horizontal"
         dataSource={props.users}
