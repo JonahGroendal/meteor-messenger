@@ -1,8 +1,6 @@
 # meteor-messenger
 A simple CRUD app made with Meteor and React Native
 
-It hasn't been tested on ios, only android. In theory it should work on both...
-
 To get it running:
 ```bash
 
@@ -21,4 +19,16 @@ npm install
 npm run start
 #then navigate to the same directory in another termainal window and run
 react-native run-android
+```
+
+To deploy:
+```bash
+# First, build.
+# This step must be done on an x86 machine with meteor installed
+./build.sh
+
+# Then extract and start containers.
+# Can be done on an ARM machine, without meteor
+./extract.sh
+docker-compose up -d
 ```
