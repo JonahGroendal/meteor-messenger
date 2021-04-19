@@ -8,13 +8,13 @@
     "visualize": "meteor --production --extra-packages bundle-visualizer"
   },
   "dependencies": {
-    "@babel/runtime": "^7.7.6",
-    "antd": "^3.26.3",
-    "antd-mobile": "^2.3.1",
+    "@babel/runtime": "^7.13.10",
+    "antd": "^3.26.20",
+    "antd-mobile": "^2.3.4",
     "indexof": "0.0.1",
-    "meteor-node-stubs": "^1.0.0",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
+    "meteor-node-stubs": "^1.0.3",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "react-mounter": "^1.2.0"
   },
   "meteor": {
