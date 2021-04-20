@@ -1,12 +1,14 @@
 version: "3"
 volumes:
- certificates:
+ datadb:
 services:
   mongodb0:
     image: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: nhfd57hh9qiu0-
+    volumes:
+      - datadb:/data/db/
     restart: always
   messenger-server:
     build: .
@@ -14,4 +16,6 @@ services:
       MONGO_URL: "mongodb://root:nhfd57hh9qiu0-@mongodb0:27017/admin"
       ROOT_URL: "http://messenger-server:3000/"
       PORT: 3000
+    ports:
+      - "3000:3000"
     restart: always
