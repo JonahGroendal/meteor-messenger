@@ -12,13 +12,12 @@ npm run start
 # then navigate to localhost:3000 in your browser to see the web app
 
 # to get the android app running, open a new terminal window and
-npm install -g react-native@0.59.10
 cd meteor-messenger/RNProject
 npm install
 # start up your android emulator, then
 npm run start
-#then navigate to the same directory in another termainal window and run
-react-native run-android
+#then navigate to the same directory in another terminal window and run
+npm run android
 ```
 
 To deploy:
